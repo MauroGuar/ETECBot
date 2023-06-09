@@ -10,15 +10,15 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 
 class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
-    private val commands: ArrayList<Command> = arrayListOf();
+    private val cmds: ArrayList<Cmd> = arrayListOf();
     private val guildId = bot.guilD_ID
     init {
-        commands.addAll(arrayListOf(Help(bot)))
+        cmds.addAll(arrayListOf(Help(bot)))
     }
 
     private fun unpackCommandData(): List<CommandData> {
         val commandData = arrayListOf<CommandData>()
-        commands.forEach {
+        cmds.forEach {
             if (it.args == null) {
                 val slashCommand: SlashCommandData = Commands.slash(it.name, it.description)
                 commandData.add(slashCommand)
@@ -31,7 +31,7 @@ class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
     }
 
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
-        commands.find {
+        cmds.find {
             it.name == event.name
         }?.execute(event) ?: println("Null slash command")
     }
@@ -39,7 +39,8 @@ class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
     override fun onReady(event: ReadyEvent) {
         val cmdsData = unpackCommandData()
         cmdsData.forEach {
-            event.jda.getGuildById(guildId)?.upsertCommand(it)?.queue()?: println("\u001B[31m" + "No command found")
+            event.jda.getGuildById(guildId)?.updateCommands()?.addCommands(it)?.queue() ?: println("\u001B[31m" + "No command found")
         }
+        event.jda.updateCommands().queue();
     }
 }

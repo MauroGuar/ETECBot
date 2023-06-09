@@ -6,14 +6,19 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.RestAction;
+
+import java.util.List;
 
 public class ETECBot {
-//  Discord API Token and Servers Guilds
+    //  Discord API Token and Servers Guilds
     private static String TOKEN;
     private String GUILD_ID;
-//  Bot JDA api
+    //  Bot JDA api
     public JDA api;
+
     public ETECBot() {
 //      Loading .env values
         Dotenv dotenv = Dotenv.load();
