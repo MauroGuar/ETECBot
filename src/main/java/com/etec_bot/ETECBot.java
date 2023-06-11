@@ -1,6 +1,7 @@
 package com.etec_bot;
 
 import com.etec_bot.cmd_handler.CmdsManager;
+import com.etec_bot.json_handler.JsonManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -43,5 +44,6 @@ public class ETECBot {
 
     public static void main(String[] args) {
         ETECBot etecBot = new ETECBot();
+        JsonManager jsonManager = new JsonManager();
     }
 }
