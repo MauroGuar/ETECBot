@@ -1,0 +1,15 @@
+[
+  {
+    "uuid": "02d0ee2f-61b2-490d-982c-f44f76119c6e",
+    "name": "Test List",
+    "channelId": "1118350313167003678",
+    "guildID": "698250813180477460",
+    "tasks": [
+      {
+        "content": "Hacer la tareaaaa!",
+        "userTakenId": "506118589917429771",
+        "done": false
+      }
+    ]
+  }
+]

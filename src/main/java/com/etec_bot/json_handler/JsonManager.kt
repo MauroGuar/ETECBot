@@ -3,16 +3,14 @@ package com.etec_bot.json_handler
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class JsonManager {
     init {
-        /*val gson = Gson()
-        val tests2: List<Test> = listOf(Test("Test 3", 2124), Test("Test 4", 2323))
-        val test3 = Test("Test 3", 4857)
-        val json = gson.toJson(tests2)
-        val file = File("src/main/resources/test.json")
-        file.writeText(json)*/
-        val testManager = TestManager()
+//        val testManager = TestManager()
+        val todoList = TodoListManager()
+//        todoList.create(TodoList(UUID.randomUUID().toString(), "Test List", "1118350313167003678", "698250813180477460", arrayListOf(Task("Hacer la tareaaaa!", "506118589917429771"))))
     }
 
     private fun getJsonFiles(jsonsPath: String): ArrayList<File> {
@@ -60,38 +58,46 @@ open class JsonManager {
         return File(filePath).writeText(jsonStr)
     }
 
-    inner class TestManager {
-        private var tests: List<Test>? = mutableListOf()
-        private val jsonPath = "src/main/resources/test.json"
+    inner class TodoListManager() {
+        private var actualTodoLists: ArrayList<TodoList> = arrayListOf()
+        private val jsonPath = "src/main/resources/todo-lists.json"
         private val jsonDirectoryPath = "src/main/resources/"
         private var gson: Gson = Gson();
         private var jsonExist: Boolean = false
 
         init {
+            jsonSetUp()
+        }
+
+        private fun jsonSetUp() {
             jsonExist = checkJsonExistOrEmpty()
             if (!jsonExist) {
-                newJsonContent("test.json", jsonDirectoryPath)
-                writeJson(tests, jsonPath)
+                newJsonContent("todo-lists.json", jsonDirectoryPath)
             }
-            println(tests)
+        }
+
+        public fun create(todoList: TodoList) {
+            newJsonContent("todo-lists.json", jsonDirectoryPath)
+            actualTodoLists.add(todoList)
+            writeJson(actualTodoLists, jsonPath)
         }
 
         private fun checkJsonExistOrEmpty(): Boolean {
-            val jsonStr = findJsonStr("test.json", jsonDirectoryPath)
+            val jsonStr = findJsonStr("todo-lists.json", jsonDirectoryPath)
             if (jsonStr != null) {
-                tests = gson.fromJsonList<Test>(jsonStr)
+                actualTodoLists = gson.fromJsonArrayList<TodoList>(jsonStr)
                 return true
             }
             return false
         }
 
-        private fun writeJson(listToWrite: List<Test>?, pathToWrite: String) {
-            val jsonContentToWrite = gson.toJson(listToWrite)
+        private fun writeJson(objToWrite: TodoList?, pathToWrite: String) {
+            val jsonContentToWrite = gson.toJson(objToWrite)
             val fileToWrite = File(pathToWrite).writeText(jsonContentToWrite)
         }
 
-        private fun writeJson(objToWrite: Test?, pathToWrite: String) {
-            val jsonContentToWrite = gson.toJson(objToWrite)
+        private fun writeJson(listToWrite: ArrayList<TodoList>?, pathToWrite: String) {
+            val jsonContentToWrite = gson.toJson(listToWrite)
             val fileToWrite = File(pathToWrite).writeText(jsonContentToWrite)
         }
 
@@ -100,13 +106,16 @@ open class JsonManager {
             if (!jsonFile.exists()) {
                 jsonFile.createNewFile()
             }
-            tests = mutableListOf(Test("Test 1", 9988))
         }
     }
-
 }
 
+inline fun <reified T> Gson.fromJsonArrayList(jsonStrContent: String) = fromJson<ArrayList<T>>(jsonStrContent,
+    object : TypeToken<ArrayList<T>>() {})
 inline fun <reified T> Gson.fromJsonList(jsonStrContent: String) = fromJson<List<T>>(jsonStrContent,
     object : TypeToken<List<T>>() {})
 
 data class Test(val name: String?, val number: Int?)
+
+data class TodoList(val uuid: String, val name: String, val channelId: String, val guildID: String, val tasks: ArrayList<Task>)
+data class Task(val content: String, val userTakenId: String, val done: Boolean = false)
