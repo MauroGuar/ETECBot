@@ -16,8 +16,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation ("com.google.guava:guava:31.1-jre")
-//    implementation ("net.dv8tion:JDA:5.0.0-beta.10")
-    implementation("net.dv8tion:JDA:5.0.0-beta.9")
+    implementation("net.dv8tion:JDA:5.0.0-beta.11")
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
 }

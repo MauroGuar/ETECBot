@@ -2,6 +2,8 @@ package com.etec_bot.cmd_handler
 
 import com.etec_bot.ETECBot
 import com.etec_bot.cmd_handler.cmds.Help
+import com.etec_bot.cmd_handler.cmds.todo.Todo
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.session.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -12,14 +14,26 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
     private val cmds: ArrayList<Cmd> = arrayListOf();
     private val guildId = bot.guilD_ID
+
     init {
-        cmds.addAll(arrayListOf(Help(bot)))
+        cmds.addAll(arrayListOf(Help(bot), Todo(bot)))
     }
 
     private fun unpackCommandData(): List<CommandData> {
         val commandData = arrayListOf<CommandData>()
         cmds.forEach {
-            if (it.args == null) {
+            if (it.subcommands != null) {
+                val slashCommand: SlashCommandData = Commands.slash(it.name, it.description)
+                it.subcommands.entries.forEach { entry ->
+                    val subCmd = entry.key
+                    val optDataArrList = entry.value
+                    optDataArrList?.forEach { optData ->
+                        subCmd.addOptions(optData)
+                    }
+                    slashCommand.addSubcommands(subCmd)
+                }
+                commandData.add(slashCommand)
+            } else if (it.args == null) {
                 val slashCommand: SlashCommandData = Commands.slash(it.name, it.description)
                 commandData.add(slashCommand)
             } else {
@@ -36,11 +50,18 @@ class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
         }?.execute(event) ?: println("Null slash command")
     }
 
+    override fun onCommandAutoCompleteInteraction(event: CommandAutoCompleteInteractionEvent) {
+        cmds.find {
+            it.name == event.name
+        }?.autoCompletion(event) ?: println("Null slash command")
+    }
+
     override fun onReady(event: ReadyEvent) {
         val cmdsData = unpackCommandData()
         cmdsData.forEach {
-            event.jda.getGuildById(guildId)?.updateCommands()?.addCommands(it)?.queue() ?: println("\u001B[31m" + "No command found")
+            event.jda.getGuildById(guildId)?.updateCommands()?.addCommands(it)?.queue()
+                ?: println("\u001B[31m" + "No command found")
         }
-        event.jda.updateCommands().queue();
+//        event.jda.updateCommands().queue();
     }
 }

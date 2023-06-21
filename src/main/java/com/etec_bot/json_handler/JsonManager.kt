@@ -10,7 +10,14 @@ open class JsonManager {
     init {
 //        val testManager = TestManager()
         val todoList = TodoListManager()
-//        todoList.create(TodoList(UUID.randomUUID().toString(), "Test List", "1118350313167003678", "698250813180477460", arrayListOf(Task("Hacer la tareaaaa!", "506118589917429771"))))
+        /*todoList.create(
+            TodoList(
+                "Test List",
+                "1118350313167003678",
+                "698250813180477460",
+                arrayListOf(Task("Hacer la tareaaaa!", "506118589917429771"))
+            )
+        )*/
     }
 
     private fun getJsonFiles(jsonsPath: String): ArrayList<File> {
@@ -54,9 +61,6 @@ open class JsonManager {
         return jsonStr
     }
 
-    internal fun writeFile(filePath: String, jsonStr: String) {
-        return File(filePath).writeText(jsonStr)
-    }
 
     inner class TodoListManager() {
         private var actualTodoLists: ArrayList<TodoList> = arrayListOf()
@@ -76,8 +80,9 @@ open class JsonManager {
             }
         }
 
-        public fun create(todoList: TodoList) {
+        fun create(todoList: TodoList) {
             newJsonContent("todo-lists.json", jsonDirectoryPath)
+            todoList.numberID = nextNumberID(todoList.guildID)
             actualTodoLists.add(todoList)
             writeJson(actualTodoLists, jsonPath)
         }
@@ -107,15 +112,32 @@ open class JsonManager {
                 jsonFile.createNewFile()
             }
         }
+
+        private fun nextNumberID(guildID: String): Int {
+            val numberID: Int
+            val todoListsWithGuild = actualTodoLists.filter { it.guildID == guildID }
+            val todoListMaxNumber = todoListsWithGuild.maxByOrNull { it.numberID }
+            numberID = (todoListMaxNumber?.numberID ?: 0) + 1
+            return numberID
+        }
     }
 }
 
 inline fun <reified T> Gson.fromJsonArrayList(jsonStrContent: String) = fromJson<ArrayList<T>>(jsonStrContent,
     object : TypeToken<ArrayList<T>>() {})
+
 inline fun <reified T> Gson.fromJsonList(jsonStrContent: String) = fromJson<List<T>>(jsonStrContent,
     object : TypeToken<List<T>>() {})
 
-data class Test(val name: String?, val number: Int?)
 
-data class TodoList(val uuid: String, val name: String, val channelId: String, val guildID: String, val tasks: ArrayList<Task>)
+data class TodoList(
+    val name: String,
+    val channelId: String,
+    val guildID: String,
+    val tasks: ArrayList<Task>?,
+    var numberID: Int = 0,
+    val ID: String = UUID.randomUUID().toString()
+) {
+}
+
 data class Task(val content: String, val userTakenId: String, val done: Boolean = false)
