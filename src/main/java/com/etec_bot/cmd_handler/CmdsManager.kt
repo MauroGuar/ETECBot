@@ -1,6 +1,7 @@
 package com.etec_bot.cmd_handler
 
 import com.etec_bot.ETECBot
+import com.etec_bot.cmd_handler.cmds.Embed
 import com.etec_bot.cmd_handler.cmds.Help
 import com.etec_bot.cmd_handler.cmds.todo.Todo
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
@@ -16,7 +17,7 @@ class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
     private val guildId = bot.guilD_ID
 
     init {
-        cmds.addAll(arrayListOf(Help(bot), Todo(bot)))
+        cmds.addAll(arrayListOf(Help(bot), Todo(bot), Embed(bot)))
     }
 
     private fun unpackCommandData(): List<CommandData> {
@@ -58,10 +59,7 @@ class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
 
     override fun onReady(event: ReadyEvent) {
         val cmdsData = unpackCommandData()
-        cmdsData.forEach {
-            event.jda.getGuildById(guildId)?.updateCommands()?.addCommands(it)?.queue()
-                ?: println("\u001B[31m" + "No command found")
-        }
+        event.jda.getGuildById(guildId)?.updateCommands()?.addCommands(cmdsData)?.queue()
 //        event.jda.updateCommands().queue();
     }
 }

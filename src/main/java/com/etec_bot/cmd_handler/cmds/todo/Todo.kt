@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
+import kotlin.math.cbrt
 
 class Todo(etecBot: ETECBot) : Cmd(
     etecBot, "todo", "Comandos para administrar todo-lists.", null, linkedMapOf(
@@ -17,12 +18,14 @@ class Todo(etecBot: ETECBot) : Cmd(
                 OptionType.STRING, "nombre", "Nombre de la lista.", true
             ),
             OptionData(OptionType.CHANNEL, "canal", "El canal donde estará la lista", true),
+        ), SubcommandData("añadir", "Añadir una tarea a una lista.") to arrayListOf(
+            OptionData(OptionType.STRING, "tarea", "La tarea en sí.", true)
         )
     )
 ) {
     override fun execute(slashEvent: SlashCommandInteractionEvent) {
-        slashEvent.deferReply().setEphemeral(true).queue()
-        val todoListManager = JsonManager().TodoListManager()
+//        slashEvent.deferReply().setEphemeral(true).queue()
+        val todoListManager = JsonManager().TodoListManager(etecBot)
 
         when (slashEvent.subcommandName) {
             "crear" -> {
@@ -30,10 +33,29 @@ class Todo(etecBot: ETECBot) : Cmd(
                 val channel = slashEvent.getOption("canal")?.asChannel
 
                 if (name != null && channel != null && slashEvent.guild != null) {
-                    todoListManager.create(TodoList(name, channel.id, slashEvent.guild!!.id, null))
-                    slashEvent.hook.sendMessage("¡Lista creada con éxito!").queue()
+                    if(todoListManager.create(TodoList(name, channel.id, slashEvent.guild!!.id, null))){
+                        slashEvent.reply("¡Lista creada con éxito!").setEphemeral(true).queue()
+                    } else {
+                        slashEvent.reply("¡Ya existe una lista en este canal!").setEphemeral(true).queue()
+                    }
                 } else {
-                    slashEvent.hook.sendMessage("¡Falta algún argumento!").queue()
+                    slashEvent.reply("¡Falta algún argumento!").setEphemeral(true).queue()
+                }
+            }
+
+            "añadir" -> {
+                val taskContent = slashEvent.getOption("tarea")?.asString
+                val guildID = slashEvent.guild?.id
+                val channelID = slashEvent.channel.id
+
+                if (taskContent != null && guildID != null) {
+                    if (todoListManager.addTask(guildID, channelID, taskContent)) {
+                        slashEvent.reply("¡Tarea añadida con éxito!").setEphemeral(true).queue()
+                    } else {
+                        slashEvent.reply("¡La lista no existe!").setEphemeral(true).queue()
+                    }
+                } else {
+                    slashEvent.reply("¡Falta algún argumento!").setEphemeral(true).queue()
                 }
             }
         }

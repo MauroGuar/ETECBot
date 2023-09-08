@@ -1,6 +1,7 @@
 package com.etec_bot;
 
 import com.etec_bot.cmd_handler.CmdsManager;
+import com.etec_bot.event_handler.RoleAdd;
 import com.etec_bot.json_handler.JsonManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
@@ -8,6 +9,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 public class ETECBot {
     //  Discord API Token and Servers Guilds
@@ -25,21 +27,23 @@ public class ETECBot {
 //      Building JDA api
         JDABuilder builder = JDABuilder.createDefault(TOKEN)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setStatus(OnlineStatus.ONLINE)
-                .setActivity(Activity.playing("/help"))
-                .addEventListeners(new CmdsManager(this));
+                .setActivity(Activity.watching("/help"))
+                .addEventListeners(new CmdsManager(this))
+                .addEventListeners(new RoleAdd(this));
         try {
             api = builder.build().awaitReady();
         } catch (InterruptedException e) {
             System.out.println("\u001B[31m" + "A problem occurred building the JDA api.");
         }
     }
+
     public String getGUILD_ID() {
         return GUILD_ID;
     }
 
     public static void main(String[] args) {
         ETECBot etecBot = new ETECBot();
-        JsonManager jsonManager = new JsonManager();
     }
 }
