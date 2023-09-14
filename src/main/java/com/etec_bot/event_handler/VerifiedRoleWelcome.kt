@@ -1,7 +1,6 @@
 package com.etec_bot.event_handler
 
 import com.etec_bot.ETECBot
-import com.etec_bot.cmd_handler.cmds.Embed
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -12,32 +11,32 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 
-class RoleAdd(private val bot: ETECBot) : ListenerAdapter() {
+class VerifiedRoleWelcome(private val bot: ETECBot) : ListenerAdapter() {
     private lateinit var guild: Guild
     private lateinit var user: User
-    private lateinit var removedRoles: List<Role>
+    private lateinit var addedRoles: List<Role>
     private lateinit var channelToWelcome: TextChannel
     override fun onGuildMemberRoleAdd(event: GuildMemberRoleAddEvent) {
         guild = event.guild
         user = event.user
-        removedRoles = event.roles
+        addedRoles = event.roles
         channelToWelcome = guild.getTextChannelById("1115262679939026975")!!
 
-        val removedRole = guild.getRoleById("1115270769841291416")?.let { CheckRole(removedRoles, it) }
-        removedRole?.let {
-            channelToWelcome.sendMessage("¡Bienvenido ${user.asMention} a la comunidad!").setEmbeds(WelcomeEmbed()).queue()
+        val addedRole = guild.getRoleById("1115270769841291416")?.let { checkRole(addedRoles, it) }
+        addedRole?.let {
+            channelToWelcome.sendMessage("¡Bienvenido ${user.asMention} a la comunidad!").setEmbeds(welcomeEmbed()).queue()
         }
     }
 
-    private fun CheckRole(userRoles: List<Role>, rolesToChecks: List<Role>): List<Role>? {
+    private fun checkRole(userRoles: List<Role>, rolesToChecks: List<Role>): List<Role>? {
         val commonRoles = userRoles.filter { rolesToChecks.contains(it) }
         return commonRoles.ifEmpty { null }
     }
-    private fun CheckRole(userRoles: List<Role>, roleToCheck: Role): Role? {
+    private fun checkRole(userRoles: List<Role>, roleToCheck: Role): Role? {
         return userRoles.find { it == roleToCheck }
     }
 
-    private fun WelcomeEmbed(): MessageEmbed {
+    private fun welcomeEmbed(): MessageEmbed {
         val welcomeEmbed = EmbedBuilder()
         val welcomeGifs = arrayListOf<String>(
             "https://media.tenor.com/oC8CSq25wx4AAAAC/baby-yoda-welcome.gif",

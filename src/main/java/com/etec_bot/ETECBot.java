@@ -1,8 +1,8 @@
 package com.etec_bot;
 
 import com.etec_bot.cmd_handler.CmdsManager;
-import com.etec_bot.event_handler.RoleAdd;
-import com.etec_bot.json_handler.JsonManager;
+import com.etec_bot.event_handler.ForumSuggestion;
+import com.etec_bot.event_handler.VerifiedRoleWelcome;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -26,12 +26,14 @@ public class ETECBot {
 
 //      Building JDA api
         JDABuilder builder = JDABuilder.createDefault(TOKEN)
-                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setStatus(OnlineStatus.ONLINE)
                 .setActivity(Activity.watching("/help"))
                 .addEventListeners(new CmdsManager(this))
-                .addEventListeners(new RoleAdd(this));
+                .addEventListeners(new VerifiedRoleWelcome(this))
+                .addEventListeners(new ForumSuggestion());
+
         try {
             api = builder.build().awaitReady();
         } catch (InterruptedException e) {
