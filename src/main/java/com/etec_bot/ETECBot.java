@@ -1,6 +1,7 @@
 package com.etec_bot;
 
 import com.etec_bot.cmd_handler.CmdsManager;
+import com.etec_bot.event_handler.EducationalDocumentArchive;
 import com.etec_bot.event_handler.ForumSuggestion;
 import com.etec_bot.event_handler.VerifiedRoleWelcome;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -32,7 +33,8 @@ public class ETECBot {
                 .setActivity(Activity.watching("/ayuda"))
                 .addEventListeners(new CmdsManager(this))
                 .addEventListeners(new VerifiedRoleWelcome(this))
-                .addEventListeners(new ForumSuggestion());
+                .addEventListeners(new ForumSuggestion())
+                .addEventListeners(new EducationalDocumentArchive());
 
         try {
             api = builder.build().awaitReady();

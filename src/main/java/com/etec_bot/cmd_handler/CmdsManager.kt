@@ -17,7 +17,7 @@ class CmdsManager(bot: ETECBot) : ListenerAdapter() {
     private val guildId = bot.guilD_ID
 
     init {
-        cmds.addAll(arrayListOf(Help(bot), Todo(bot), Embed(bot), Messages(bot)))
+        cmds.addAll(arrayListOf(Help(bot), Todo(bot), Embed(bot), Messages(bot), GenerateButton(bot)))
     }
 
     private fun unpackCommandData(): List<CommandData> {
