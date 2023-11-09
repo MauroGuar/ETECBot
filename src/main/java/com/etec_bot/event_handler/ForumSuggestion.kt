@@ -25,7 +25,7 @@ class ForumSuggestion : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         try {
             guild = event.guild
-        } catch (e: IllegalStateException) {}
+        } catch (_: IllegalStateException) {}
         user = event.author
         message = event.message
         channelUnion = event.channel
@@ -94,7 +94,7 @@ class ForumSuggestion : ListenerAdapter() {
 
                 if (reaction.emoji == Emoji.fromCustom(Emoji.fromCustom("finished", 1149734416432767028, false))) {
                     TimeUnit.SECONDS.sleep(2)
-                    val messageReaction = textChannel.deleteMessageById(messageId).queue()
+                    textChannel.deleteMessageById(messageId).queue()
                 }
             }
         }

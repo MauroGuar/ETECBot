@@ -12,19 +12,19 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 
-class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
-    private val cmds: ArrayList<Cmd> = arrayListOf();
+class CmdsManager(bot: ETECBot) : ListenerAdapter() {
+    private val cmds: ArrayList<Cmd> = arrayListOf()
     private val guildId = bot.guilD_ID
 
     init {
-        cmds.addAll(arrayListOf(Help(bot), Todo(bot), Embed(bot)))
+        cmds.addAll(arrayListOf(Help(bot), Todo(bot), Embed(bot), Messages(bot)))
     }
 
     private fun unpackCommandData(): List<CommandData> {
         val commandData = arrayListOf<CommandData>()
         cmds.forEach {
             if (it.subcommands != null) {
-                val slashCommand: SlashCommandData = Commands.slash(it.name, it.description)
+                val slashCommand: SlashCommandData = Commands.slash(it.name, it.description).setGuildOnly(it.guildOnly)
                 it.subcommands.entries.forEach { entry ->
                     val subCmd = entry.key
                     val optDataArrList = entry.value
@@ -35,10 +35,10 @@ class CmdsManager(private val bot: ETECBot) : ListenerAdapter() {
                 }
                 commandData.add(slashCommand)
             } else if (it.args == null) {
-                val slashCommand: SlashCommandData = Commands.slash(it.name, it.description)
+                val slashCommand: SlashCommandData = Commands.slash(it.name, it.description).setGuildOnly(it.guildOnly)
                 commandData.add(slashCommand)
             } else {
-                val slashCommand: SlashCommandData = Commands.slash(it.name, it.description).addOptions(it.args)
+                val slashCommand: SlashCommandData = Commands.slash(it.name, it.description).addOptions(it.args).setGuildOnly(it.guildOnly)
                 commandData.add(slashCommand)
             }
         }

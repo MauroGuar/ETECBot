@@ -24,7 +24,7 @@ class VerifiedRoleWelcome(private val bot: ETECBot) : ListenerAdapter() {
 
         val addedRole = guild.getRoleById("1115270769841291416")?.let { checkRole(addedRoles, it) }
         addedRole?.let {
-            channelToWelcome.sendMessage("¡Bienvenido ${user.asMention} a la comunidad!").setEmbeds(welcomeEmbed()).queue()
+            channelToWelcome.sendMessage("¡Bienvenido/a ${user.asMention} a la comunidad!").setEmbeds(welcomeEmbed()).queue()
         }
     }
 
@@ -46,7 +46,11 @@ class VerifiedRoleWelcome(private val bot: ETECBot) : ListenerAdapter() {
             "https://media.giphy.com/media/xUPGGDNsLvqsBOhuU0/giphy.gif",
             "https://media.giphy.com/media/FQyQEYd0KlYQ/giphy.gif",
             "https://media.giphy.com/media/ASd0Ukj0y3qMM/giphy.gif",
-            "https://media.giphy.com/media/Id6dC0GQOOzPMXgcPv/giphy.gif"
+            "https://media.giphy.com/media/Id6dC0GQOOzPMXgcPv/giphy.gif",
+            "https://media.giphy.com/media/12B39IawiNS7QI/giphy.gif",
+            "https://media.giphy.com/media/3ornk57KwDXf81rjWM/giphy.gif",
+            "https://media.giphy.com/media/hTruzAjXFLEiTNBbwx/giphy.gif",
+            "https://media.tenor.com/AvEF5AMuxLgAAAAC/h1-hello1.gif"
         )
         welcomeEmbed.setImage(welcomeGifs[(0 until welcomeGifs.size).random()])
         welcomeEmbed.setFooter(

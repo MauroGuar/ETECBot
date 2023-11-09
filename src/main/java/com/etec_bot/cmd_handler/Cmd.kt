@@ -11,8 +11,9 @@ abstract class Cmd(
     val name: String,
     val description: String,
     val args: List<OptionData>?,
-    val subcommands: LinkedHashMap<SubcommandData, List<OptionData>?>?
+    val subcommands: LinkedHashMap<SubcommandData, List<OptionData>?>?,
+    val guildOnly: Boolean = true
 ) {
-    abstract fun execute(slashEvent: SlashCommandInteractionEvent): Unit
-    abstract fun autoCompletion(autoCompeteEvent: CommandAutoCompleteInteractionEvent): Unit
+    abstract fun execute(slashEvent: SlashCommandInteractionEvent)
+    abstract fun autoCompletion(autoCompeteEvent: CommandAutoCompleteInteractionEvent)
 }

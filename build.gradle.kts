@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.etec_bot"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -21,6 +21,7 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(kotlin("stdlib-jdk8"))
+    implementation("mysql:mysql-connector-java:8.0.33")
 }
 
 application {

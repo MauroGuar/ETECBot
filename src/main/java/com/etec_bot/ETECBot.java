@@ -29,7 +29,7 @@ public class ETECBot {
                 .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setStatus(OnlineStatus.ONLINE)
-                .setActivity(Activity.watching("/help"))
+                .setActivity(Activity.watching("/ayuda"))
                 .addEventListeners(new CmdsManager(this))
                 .addEventListeners(new VerifiedRoleWelcome(this))
                 .addEventListeners(new ForumSuggestion());
