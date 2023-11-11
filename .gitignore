@@ -45,3 +45,4 @@ bin/
 .env
 .json
 
+/gradle_cache/
