@@ -1,7 +1,7 @@
 plugins {
     id("java")
     application
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
 }
 
 group = "com.etec_bot"
@@ -20,8 +20,9 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.9")
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation(kotlin("stdlib-jdk8"))
-    implementation("mysql:mysql-connector-java:8.0.33")
+    implementation("com.google.api-client:google-api-client:2.2.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
+    implementation("com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0")
 }
 
 application {
@@ -44,6 +45,9 @@ tasks.register<Jar>("fatJar") {
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
+    from("${project.projectDir}/src/main/") {
+        include("resources/**")
+    }
     from("${project.projectDir}") {
         include(".env")
     }

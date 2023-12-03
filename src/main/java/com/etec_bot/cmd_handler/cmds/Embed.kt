@@ -34,5 +34,5 @@ class Embed(etecBot: ETECBot) : Cmd(etecBot, "embed", "Hacer embed.", args = nul
         slashEvent.hook.sendMessage("¡Bienvenido ${slashEvent.user.asMention} a la comunidad!").setEmbeds(eb2.build()).queue()
     }
 
-    override fun autoCompletion(autoCompeteEvent: CommandAutoCompleteInteractionEvent) {}
+    override fun autoCompletion(autoCompleteEvent: CommandAutoCompleteInteractionEvent) {}
 }

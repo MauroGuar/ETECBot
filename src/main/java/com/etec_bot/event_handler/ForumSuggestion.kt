@@ -25,7 +25,7 @@ class ForumSuggestion : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         try {
             guild = event.guild
-        } catch (_: IllegalStateException) {}
+        } catch (e: IllegalStateException) {}
         user = event.author
         message = event.message
         channelUnion = event.channel

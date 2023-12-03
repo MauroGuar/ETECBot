@@ -1,7 +1,9 @@
 package com.etec_bot.cmd_handler
 
 import com.etec_bot.ETECBot
+import com.etec_bot.cmd_handler.cmds.EDACmd
 import com.etec_bot.cmd_handler.cmds.Embed
+import com.etec_bot.cmd_handler.cmds.GenerateButton
 import com.etec_bot.cmd_handler.cmds.Help
 import com.etec_bot.cmd_handler.cmds.todo.Todo
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
@@ -17,7 +19,7 @@ class CmdsManager(bot: ETECBot) : ListenerAdapter() {
     private val guildId = bot.guilD_ID
 
     init {
-        cmds.addAll(arrayListOf(Help(bot), Todo(bot), Embed(bot), Messages(bot), GenerateButton(bot)))
+        cmds.addAll(arrayListOf(Help(bot), Todo(bot), Embed(bot), GenerateButton(bot), EDACmd(bot)))
     }
 
     private fun unpackCommandData(): List<CommandData> {

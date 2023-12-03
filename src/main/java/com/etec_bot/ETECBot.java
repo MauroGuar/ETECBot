@@ -1,9 +1,13 @@
 package com.etec_bot;
 
+import com.etec_bot.EDA.EDA;
 import com.etec_bot.cmd_handler.CmdsManager;
-import com.etec_bot.event_handler.EducationalDocumentArchive;
+import com.etec_bot.EDA.discord.Form;
+import com.etec_bot.EDA.discord.AdminCheck;
 import com.etec_bot.event_handler.ForumSuggestion;
 import com.etec_bot.event_handler.VerifiedRoleWelcome;
+import com.etec_bot.google_drive.Connection;
+import com.google.api.services.drive.Drive;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -11,6 +15,9 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 
 public class ETECBot {
     //  Discord API Token and Servers Guilds
@@ -18,6 +25,8 @@ public class ETECBot {
     private String GUILD_ID;
     //  Bot JDA api
     public JDA api;
+
+    public EDA eda = new EDA();
 
     public ETECBot() {
 //      Loading .env values
@@ -34,7 +43,8 @@ public class ETECBot {
                 .addEventListeners(new CmdsManager(this))
                 .addEventListeners(new VerifiedRoleWelcome(this))
                 .addEventListeners(new ForumSuggestion())
-                .addEventListeners(new EducationalDocumentArchive());
+                .addEventListeners(new Form(this))
+                .addEventListeners(new AdminCheck(this));
 
         try {
             api = builder.build().awaitReady();
@@ -47,7 +57,8 @@ public class ETECBot {
         return GUILD_ID;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws GeneralSecurityException, IOException {
         ETECBot etecBot = new ETECBot();
+        Drive service = Connection.Companion.getInstance().getService();
     }
 }

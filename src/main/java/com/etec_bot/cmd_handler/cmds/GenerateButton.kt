@@ -1,6 +1,7 @@
-package com.etec_bot.cmd_handler
+package com.etec_bot.cmd_handler.cmds
 
 import com.etec_bot.ETECBot
+import com.etec_bot.cmd_handler.Cmd
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
@@ -12,5 +13,5 @@ class GenerateButton(etecBot: ETECBot) : Cmd(etecBot, "gen-btn", "Genera un bot√
         ).queue()
     }
 
-    override fun autoCompletion(autoCompeteEvent: CommandAutoCompleteInteractionEvent) {}
+    override fun autoCompletion(autoCompleteEvent: CommandAutoCompleteInteractionEvent) {}
 }

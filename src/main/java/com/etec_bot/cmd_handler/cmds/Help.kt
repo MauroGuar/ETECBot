@@ -24,5 +24,5 @@ class Help(etecBot: ETECBot) : Cmd(
 
     }
 
-    override fun autoCompletion(autoCompeteEvent: CommandAutoCompleteInteractionEvent) {}
+    override fun autoCompletion(autoCompleteEvent: CommandAutoCompleteInteractionEvent) {}
 }

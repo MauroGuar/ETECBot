@@ -15,5 +15,5 @@ abstract class Cmd(
     val guildOnly: Boolean = true
 ) {
     abstract fun execute(slashEvent: SlashCommandInteractionEvent)
-    abstract fun autoCompletion(autoCompeteEvent: CommandAutoCompleteInteractionEvent)
+    abstract fun autoCompletion(autoCompleteEvent: CommandAutoCompleteInteractionEvent)
 }
